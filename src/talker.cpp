@@ -1,14 +1,52 @@
-#include "ros/ros.h"
-#include "std_msgs/String.h"
-
-
-#include <sstream>
+/***************************************************************************
+ * Copyright (c) 2019, Eashwar Sathyamurthy
+ * All rights reserved.
+ * 
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ * 
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * 
+ * 3. Neither the name of the copyright holder nor the names of its
+ * contributors may be used to endorse or promote products derived from
+ * this software without specific prior written permission.
+ * 
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ ******************************************************************************/
 
 /**
- * This tutorial demonstrates simple sending of messages over the ROS system.
+ * @file talker.cpp
+ *
+ * @author Eashwar Sathyamurthy
+ *
+ * @brief A C++ publisher node for sending messages over the ROS system.
+ *
+ * @version 1
+ *
+ * @date 2019-10-26
+ *
+ *
  */
-int main(int argc, char **argv)
-{
+
+#include <sstream>
+#include <ros/ros.h>
+#include <std_msgs/String.h>
+
+int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
    * any ROS arguments and name remapping that were provided at the command line.
@@ -19,9 +57,8 @@ int main(int argc, char **argv)
    * You must call one of the versions of ros::init() before using any other
    * part of the ROS system.
    */
- 
-  ros::init(argc, argv, "talker");
 
+  ros::init(argc, argv, "talker");
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
@@ -30,7 +67,6 @@ int main(int argc, char **argv)
    */
 
   ros::NodeHandle n;
-
 
   /**
    * The advertise() function is how you tell ROS that you want to
@@ -50,21 +86,18 @@ int main(int argc, char **argv)
    * buffer up before throwing some away.
    */
 
-  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
-
+  ros::Publisher chatter_pub = n.advertise < std_msgs::String
+      > ("chatter", 1000);
 
   ros::Rate loop_rate(10);
-
 
   /**
    * A count of how many messages we have sent. This is used to create
    * a unique string for each message.
    */
 
-  int count = 0;
-  while (ros::ok())
-  {
-
+  auto count = 0;
+  while (ros::ok()) {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
@@ -75,10 +108,7 @@ int main(int argc, char **argv)
     ss << "hello world " << count;
     msg.data = ss.str();
 
-
-
     ROS_INFO("%s", msg.data.c_str());
-
 
     /**
      * The publish() function is how you send messages. The parameter
@@ -89,14 +119,11 @@ int main(int argc, char **argv)
 
     chatter_pub.publish(msg);
 
-
     ros::spinOnce();
-
 
     loop_rate.sleep();
     ++count;
   }
-
 
   return 0;
 }

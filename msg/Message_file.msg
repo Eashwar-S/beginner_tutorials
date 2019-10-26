@@ -1,0 +1,2 @@
+string publisher_message
+string subscriber_message
