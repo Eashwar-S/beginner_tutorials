@@ -11,19 +11,26 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
-  genmsg
+  message_generation
 )
 
 ## Generate messages in the 'msg' folder
- add_message_files(
+# add_message_files(
+#   FILES
+#   Message1.msg
+# )
+
+## Generate services in the 'srv' folder
+ add_service_files(
    FILES
-   Message_file.msg
+   DisplayService.srv
  )
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
    std_msgs
+   beginner_tutorials
  )
 catkin_package(
 #  INCLUDE_DIRS include

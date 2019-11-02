@@ -44,8 +44,16 @@
 
 #include <ros/ros.h>
 #include <std_msgs/String.h>
+#include "beginner_tutorials/DisplayService.h"
 #include <sstream>
+std::string output;
+bool newMessage(beginner_tutorials::DisplayService::Request &req,
+                beginner_tutorials::DisplayService::Response &resp) {
+  resp.outputMessage = req.desiredMessage;
+  output = resp.outputMessage;
+  return false;
 
+}
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -86,8 +94,10 @@ int main(int argc, char **argv) {
    * buffer up before throwing some away.
    */
 
-  ros::Publisher chatter_pub = n.advertise < std_msgs::String
-      > ("chatter", 1000);
+  ros::ServiceServer displayService_ = n.advertiseService(
+      "Changing_Talker_Output", &newMessage);
+
+  ros::Publisher chatter_pub = n.advertise<std_msgs::String>("chatter", 1000);
 
   ros::Rate loop_rate(10);
 
@@ -105,7 +115,7 @@ int main(int argc, char **argv) {
     std_msgs::String msg;
 
     std::stringstream ss;
-    ss << "hello world " << count;
+    ss << output << count;
     msg.data = ss.str();
 
     ROS_INFO("%s", msg.data.c_str());
