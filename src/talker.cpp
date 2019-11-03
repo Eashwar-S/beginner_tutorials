@@ -29,7 +29,7 @@
  ******************************************************************************/
 
 /**
- * @file client.cpp
+ * @file talker.cpp
  *
  * @author Eashwar Sathyamurthy
  *
@@ -48,7 +48,7 @@
 
 bool display = false;
 std::string output;
-int c = 0;
+int debug = 0;
 bool newMessage(beginner_tutorials::DisplayService::Request &request,
                 beginner_tutorials::DisplayService::Response &response) {
   ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
@@ -56,9 +56,10 @@ bool newMessage(beginner_tutorials::DisplayService::Request &request,
     response.outputMessage = request.desiredMessage;
     output = response.outputMessage;
     ROS_INFO_STREAM("Modified Talker's message to :" << response.outputMessage);
-    if (c == 0){
+    if (debug == 0) {
+      ROS_DEBUG_STREAM("Is debug variable == " << 0);
       display = !display;
-      c++;
+      debug++;
     }
     return true;
   } else {
@@ -99,10 +100,11 @@ int main(int argc, char **argv) {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
+    std_msgs::String msg;
+    std::stringstream ss;
     if (display) {
       ROS_INFO_STREAM_ONCE("Publisher is publishing the new Message");
-      std_msgs::String msg;
-      std::stringstream ss;
+
       ss << output << ": Line : " << count;
       msg.data = ss.str();
       ROS_INFO("%s", msg.data.c_str());
@@ -115,9 +117,6 @@ int main(int argc, char **argv) {
        */
       chatter_pub.publish(msg);
     } else {
-      std_msgs::String msg;
-
-      std::stringstream ss;
       ss << "Hello World: Line : " << count;
       msg.data = ss.str();
       ++count;
