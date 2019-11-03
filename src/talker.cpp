@@ -33,11 +33,18 @@
  *
  * @author Eashwar Sathyamurthy
  *
- * @brief A C++ publisher node for sending messages over the ROS system.
+ * @brief A C++ publisher node having server service to change the messages
+ *        published by the publisher.
+ *
+ * @param display Parameter giving status as to which message to publish.
+ *
+ * @param output Temporary string to store the new message of the publisher.
+ *
+ * @param debug Default publisher frequency.
  *
  * @version 1
  *
- * @date 2019-10-26
+ * @date 2019-11-01
  *
  *
  */
@@ -51,11 +58,23 @@ bool display = false;
 std::string output;
 int debug = 0;
 int publisherFrequency = 10;
+
+/**
+ * @brief method to change talker node's publishing message.
+ *
+ * @param &request Reference to service file
+ *
+ * @param &response Reference to service file
+ *
+ * @return bool status of message change.
+ *
+ */
 bool newMessage(beginner_tutorials::DisplayService::Request &request,
                 beginner_tutorials::DisplayService::Response &response) {
   ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
   if (request.desiredMessage.size() > 0) {
     response.outputMessage = request.desiredMessage;
+    /// Storing outputMessage
     output = response.outputMessage;
     ROS_INFO_STREAM("Modified Talker's message to :" << response.outputMessage);
     if (debug == 0) {
@@ -71,6 +90,17 @@ bool newMessage(beginner_tutorials::DisplayService::Request &request,
   }
   return false;
 }
+
+/**
+ * @brief Main function
+ *
+ * @param argc Gives number of command line arguments passed
+ *  including output file name.
+ *
+ * @param argv is array of character pointers
+ *
+ * @return 0
+ */
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -92,15 +122,36 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle nh_;
-  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
-     ros::console::notifyLoggerLevelsChanged();
+  /// Creating a client service object
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME,
+                                     ros::console::levels::Debug)) {
+    ros::console::notifyLoggerLevelsChanged();
   }
+  /**
+    * The advertise() function is how you tell ROS that you want to
+    * publish on a given topic name. This invokes a call to the ROS
+    * master node, which keeps a registry of who is publishing and who
+    * is subscribing. After this advertise() call is made, the master
+    * node will notify anyone who is trying to subscribe to this topic name,
+    * and they will in turn negotiate a peer-to-peer connection with this
+    * node.  advertise() returns a Publisher object which allows you to
+    * publish messages on that topic through a call to publish().  Once
+    * all copies of the returned Publisher object are destroyed, the topic
+    * will be automatically unadvertised.
+    *
+    * The second parameter to advertise() is the size of the message queue
+    * used for publishing messages.  If messages are published more quickly
+    * than we can send them, the number here specifies how many messages to
+    * buffer up before throwing some away.
+    */
   ros::Publisher chatter_pub = nh_.advertise<std_msgs::String>("chatter", 1000);
+  /// Creating server service object
   ros::ServiceServer displayService_ = nh_.advertiseService(
       "changing_talker_output", &newMessage);
   if (argc == 2) {
     ROS_INFO_STREAM(
         "The publisher will publish messages at frequency " << std::atoi(argv[1]) << " Hertz");
+    /// converting charater pointer to interger
     publisherFrequency = std::atoi(argv[1]);
   } else if (argc == 1) {
     ROS_WARN_STREAM(

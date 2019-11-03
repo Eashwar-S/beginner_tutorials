@@ -37,18 +37,36 @@
  *
  * @version 1
  *
- * @date 2019-10-26
+ * @date 2019-11-01
  *
  *
  */
 #include <ros/console.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
-
+/**
+ * @brief Callback method used by listener node to give acknowledgment to
+ *        the talker node by printing messages in command line.
+ *
+ * @param msg A standard message of string type
+ *
+ *
+ * @return void
+ *
+ */
 void chatterCallback(const std_msgs::String::ConstPtr& msg) {
   ROS_INFO_STREAM("I heard: " << msg->data.c_str());
 }
-
+/**
+ * @brief Main function
+ *
+ * @param argc Gives number of command line arguments passed
+ *  including output file name.
+ *
+ * @param argv is array of character pointers
+ *
+ * @return 0
+ */
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -68,8 +86,10 @@ int main(int argc, char **argv) {
    * NodeHandle destructed will close down the node.
    */
   ros::NodeHandle n;
-  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
-     ros::console::notifyLoggerLevelsChanged();
+  /// Setting Verbosity Levels
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME,
+                                     ros::console::levels::Debug)) {
+    ros::console::notifyLoggerLevelsChanged();
   }
   /**
    * The subscribe() call is how you tell ROS that you want to receive messages

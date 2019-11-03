@@ -33,11 +33,12 @@
  *
  * @author Eashwar Sathyamurthy
  *
- * @brief A C++ publisher node for sending messages over the ROS system.
+ * @brief A C++ node used to provide the service of the requesting the server
+ *        service to modify the talker node's publishing message.
  *
  * @version 1
  *
- * @date 2019-10-26
+ * @date 2019-11-01
  *
  *
  */
@@ -45,7 +46,16 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include "beginner_tutorials/DisplayService.h"
-
+/**
+ * @brief Main function
+ *
+ * @param argc Gives number of command line arguments passed
+ *  including output file name.
+ *
+ * @param argv is array of character pointers
+ *
+ * @return 0
+ */
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -67,15 +77,20 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle n;
-  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
-     ros::console::notifyLoggerLevelsChanged();
+  /// Setting Verbosity Levels
+  if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME,
+                                     ros::console::levels::Debug)) {
+    ros::console::notifyLoggerLevelsChanged();
   }
+  /// Creating a client service object
   ros::ServiceClient client = n
       .serviceClient<beginner_tutorials::DisplayService>(
           "changing_talker_output");
+  /// Creating service file object
   beginner_tutorials::DisplayService displayService;
   ROS_INFO_STREAM("Requesting server service to change publisher message");
   displayService.request.desiredMessage = "This is Eashwar";
+  /// Setting loop rate very low for better visualization of output.
   ros::Rate loop_rate(0.5);
   loop_rate.sleep();
   if (client.call(displayService)) {
