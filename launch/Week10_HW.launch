@@ -1,0 +1,23 @@
+<launch>
+  <node
+    pkg="beginner_tutorials"
+    type="talker"
+    name="talker"
+    output = "screen"
+    launch-prefix = "xterm -e"
+  />
+  <node
+    pkg="beginner_tutorials"
+    type="listener"
+    name="listener"
+    output = "screen"
+    launch-prefix = "xterm -e"
+  />
+  <node
+    pkg="beginner_tutorials"
+    type="Client"
+    name="Client"
+    output = "screen"
+    launch-prefix = "xterm -e"
+  />
+</launch>
