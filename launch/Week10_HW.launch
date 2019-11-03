@@ -4,6 +4,7 @@
     pkg="beginner_tutorials"
     type="talker"
     name="talker"
+    required = "true"
     output = "screen"
     args="$(arg publisherFrequency)"
     launch-prefix = "xterm -e"

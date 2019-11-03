@@ -41,7 +41,7 @@
  *
  *
  */
-
+#include <ros/console.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include "beginner_tutorials/DisplayService.h"
@@ -92,6 +92,9 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle nh_;
+  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
+     ros::console::notifyLoggerLevelsChanged();
+  }
   ros::Publisher chatter_pub = nh_.advertise<std_msgs::String>("chatter", 1000);
   ros::ServiceServer displayService_ = nh_.advertiseService(
       "changing_talker_output", &newMessage);

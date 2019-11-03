@@ -41,7 +41,7 @@
  *
  *
  */
-
+#include <ros/console.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include "beginner_tutorials/DisplayService.h"
@@ -67,6 +67,9 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle n;
+  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
+     ros::console::notifyLoggerLevelsChanged();
+  }
   ros::ServiceClient client = n
       .serviceClient<beginner_tutorials::DisplayService>(
           "changing_talker_output");
