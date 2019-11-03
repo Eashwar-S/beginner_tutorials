@@ -46,28 +46,6 @@
 #include <std_msgs/String.h>
 #include "beginner_tutorials/DisplayService.h"
 
-bool display = false;
-std::string output;
-int c = 0;
-bool newMessage(beginner_tutorials::DisplayService::Request &request,
-                beginner_tutorials::DisplayService::Response &response) {
-  ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
-  if (request.desiredMessage.size() > 0) {
-    response.outputMessage = request.desiredMessage;
-    output = response.outputMessage;
-    ROS_INFO_STREAM("Modified Talker's message to :" << response.outputMessage);
-    if (c == 0){
-      display = !display;
-      c++;
-    }
-    return true;
-  } else {
-    ROS_ERROR_STREAM(
-        "Publisher message modification Unsuccessful. No new message received from the client");
-    return false;
-  }
-  return false;
-}
 int main(int argc, char **argv) {
   /**
    * The ros::init() function needs to see argc and argv so that it can perform
@@ -80,7 +58,7 @@ int main(int argc, char **argv) {
    * part of the ROS system.
    */
 
-  ros::init(argc, argv, "Server");
+  ros::init(argc, argv, "Client");
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
@@ -88,51 +66,16 @@ int main(int argc, char **argv) {
    * NodeHandle destructed will close down the node.
    */
 
-  ros::NodeHandle nh_;
-  ros::Publisher chatter_pub = nh_.advertise<std_msgs::String>("chatter", 1000);
-  ros::ServiceServer displayService_ = nh_.advertiseService(
-      "changing_talker_output", &newMessage);
-
-  ros::Rate loop_rate(10);
-  auto count = 0;
-  while (ros::ok()) {
-    /**
-     * This is a message object. You stuff it with data, and then publish it.
-     */
-    if (display) {
-      ROS_INFO_STREAM_ONCE("Publisher is publishing the new Message");
-      std_msgs::String msg;
-      std::stringstream ss;
-      ss << output << ": Line : " << count;
-      msg.data = ss.str();
-      ROS_INFO("%s", msg.data.c_str());
-      ++count;
-      /**
-       * The publish() function is how you send messages. The parameter
-       * is the message object. The type of this object must agree with the type
-       * given as a template parameter to the advertise<>() call, as was done
-       * in the constructor above.
-       */
-      chatter_pub.publish(msg);
-    } else {
-      std_msgs::String msg;
-
-      std::stringstream ss;
-      ss << "Hello World: Line : " << count;
-      msg.data = ss.str();
-      ++count;
-      ROS_INFO_STREAM(msg.data.c_str());
-
-      /**
-       * The publish() function is how you send messages. The parameter
-       * is the message object. The type of this object must agree with the type
-       * given as a template parameter to the advertise<>() call, as was done
-       * in the constructor above.
-       */
-      chatter_pub.publish(msg);
-    }
-    ros::spinOnce();
-    loop_rate.sleep();
-  }
+  ros::NodeHandle n;
+  ros::ServiceClient client = n
+      .serviceClient<beginner_tutorials::DisplayService>(
+      "changing_talker_output");
+  beginner_tutorials::DisplayService displayService;
+  displayService.request.desiredMessage = "This is Eashwar";
+  if (client.call(displayService)) {
+    ROS_INFO_STREAM("Modification Successful");
+  } else
+    ROS_ERROR_STREAM("Modifications Unsucessful");
   return 0;
+
 }

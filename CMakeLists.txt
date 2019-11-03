@@ -17,9 +17,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 # add_message_files(
 #   FILES
-#   Message1.msg
+#   NewDisplayMessage.msg
 # )
-
+#
 ## Generate services in the 'srv' folder
  add_service_files(
    FILES
@@ -30,7 +30,6 @@ find_package(catkin REQUIRED COMPONENTS
  generate_messages(
    DEPENDENCIES
    std_msgs
-   beginner_tutorials
  )
 catkin_package(
 #  INCLUDE_DIRS include
@@ -56,17 +55,18 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/beginner_tutorials_node.cpp)
 add_executable(talker src/talker.cpp)
 add_executable(listener src/listener.cpp)
+add_executable(Client src/Client.cpp)
 
 ## Added cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(talker beginner_tutorials_generate_messages_cpp)
 add_dependencies(listener beginner_tutorials_generate_messages_cpp)
-
+add_dependencies(Client beginner_tutorials_generate_messages_cpp)
 ## Specified libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
 target_link_libraries(talker ${catkin_LIBRARIES})
 target_link_libraries(listener ${catkin_LIBRARIES})
-
+target_link_libraries(Client ${catkin_LIBRARIES})
