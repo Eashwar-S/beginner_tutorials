@@ -38,8 +38,6 @@
  *
  * @param display Parameter giving status as to which message to publish.
  *
- * @param output Temporary string to store the new message of the publisher.
- *
  * @param debug Default publisher frequency.
  *
  * @version 1
@@ -51,11 +49,11 @@
 #include <ros/console.h>
 #include <ros/ros.h>
 #include <std_msgs/String.h>
-#include "beginner_tutorials/DisplayService.h"
+#include <sstream>
 #include <cstdlib>
+#include "beginner_tutorials/DisplayService.h"
 
 bool display = false;
-std::string output;
 int debug = 0;
 int publisherFrequency = 10;
 
@@ -69,14 +67,14 @@ int publisherFrequency = 10;
  * @return bool status of message change.
  *
  */
-bool newMessage(beginner_tutorials::DisplayService::Request &request,
-                beginner_tutorials::DisplayService::Response &response) {
+bool newMessage(
+    beginner_tutorials::DisplayService::Request &request,
+    beginner_tutorials::DisplayService::Response &response) {
   ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
   if (request.desiredMessage.size() > 0) {
     response.outputMessage = request.desiredMessage;
-    /// Storing outputMessage
-    output = response.outputMessage;
-    ROS_INFO_STREAM("Modified Talker's message to :" << response.outputMessage);
+    ROS_INFO_STREAM(
+        "Modified Talker's message to :" << response.outputMessage);
     if (debug == 0) {
       ROS_DEBUG_STREAM("Is debug variable == " << 0);
       display = !display;
@@ -84,8 +82,8 @@ bool newMessage(beginner_tutorials::DisplayService::Request &request,
     }
     return true;
   } else {
-    ROS_ERROR_STREAM(
-        "Publisher message modification Unsuccessful. No new message received from the client");
+    ROS_ERROR_STREAM("Publisher message modification Unsuccessful. "
+        "No new message received from the client");
     return false;
   }
   return false;
@@ -128,36 +126,38 @@ int main(int argc, char **argv) {
     ros::console::notifyLoggerLevelsChanged();
   }
   /**
-    * The advertise() function is how you tell ROS that you want to
-    * publish on a given topic name. This invokes a call to the ROS
-    * master node, which keeps a registry of who is publishing and who
-    * is subscribing. After this advertise() call is made, the master
-    * node will notify anyone who is trying to subscribe to this topic name,
-    * and they will in turn negotiate a peer-to-peer connection with this
-    * node.  advertise() returns a Publisher object which allows you to
-    * publish messages on that topic through a call to publish().  Once
-    * all copies of the returned Publisher object are destroyed, the topic
-    * will be automatically unadvertised.
-    *
-    * The second parameter to advertise() is the size of the message queue
-    * used for publishing messages.  If messages are published more quickly
-    * than we can send them, the number here specifies how many messages to
-    * buffer up before throwing some away.
-    */
+   * The advertise() function is how you tell ROS that you want to
+   * publish on a given topic name. This invokes a call to the ROS
+   * master node, which keeps a registry of who is publishing and who
+   * is subscribing. After this advertise() call is made, the master
+   * node will notify anyone who is trying to subscribe to this topic name,
+   * and they will in turn negotiate a peer-to-peer connection with this
+   * node.  advertise() returns a Publisher object which allows you to
+   * publish messages on that topic through a call to publish().  Once
+   * all copies of the returned Publisher object are destroyed, the topic
+   * will be automatically unadvertised.
+   *
+   * The second parameter to advertise() is the size of the message queue
+   * used for publishing messages.  If messages are published more quickly
+   * than we can send them, the number here specifies how many messages to
+   * buffer up before throwing some away.
+   */
   ros::Publisher chatter_pub = nh_.advertise<std_msgs::String>("chatter", 1000);
   /// Creating server service object
   ros::ServiceServer displayService_ = nh_.advertiseService(
-      "changing_talker_output", &newMessage);
+      "changing_talker_output", newMessage);
   if (argc == 2) {
     ROS_INFO_STREAM(
-        "The publisher will publish messages at frequency " << std::atoi(argv[1]) << " Hertz");
+        "The publisher will publish messages at"
+        " frequency " << std::atoi(argv[1]) << " Hertz");
     /// converting charater pointer to interger
     publisherFrequency = std::atoi(argv[1]);
   } else if (argc == 1) {
     ROS_WARN_STREAM(
         "No publisher frequency specified. Using default frequency");
-  } else
+  } else {
     ROS_ERROR_STREAM("Invalid Number of arguments");
+  }
   ros::Rate loop_rate(publisherFrequency);
   auto count = 0;
   while (ros::ok()) {
@@ -169,7 +169,7 @@ int main(int argc, char **argv) {
     if (display) {
       ROS_INFO_STREAM_ONCE("Publisher is publishing the new Message");
 
-      ss << output << ": Line : " << count;
+      ss << "This is Eashwar : Line : " << count;
       msg.data = ss.str();
       ROS_INFO("%s", msg.data.c_str());
       ++count;

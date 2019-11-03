@@ -4,6 +4,13 @@ Command:
 
 Output:
 
-Done processing ./beginner_tutorials/src/talker.cpp
-Done processing ./beginner_tutorials/src/listener.cpp
+./src/beginner_tutorials/src/talker.cpp:71:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Request &request  [runtime/references] [2]
+./src/beginner_tutorials/src/talker.cpp:72:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Response &response  [runtime/references] [2]
+Done processing ./src/beginner_tutorials/src/talker.cpp
+Done processing ./src/beginner_tutorials/src/Client.cpp
+Done processing ./src/beginner_tutorials/src/listener.cpp
+Total errors found: 2
+
+
+By replacing the non-constant reference with const or pointers, it is giving errors. Since, the errors only of level 2, I ignored.
 

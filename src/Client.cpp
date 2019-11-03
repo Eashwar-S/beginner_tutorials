@@ -95,11 +95,12 @@ int main(int argc, char **argv) {
   loop_rate.sleep();
   if (client.call(displayService)) {
     ROS_INFO_STREAM(
-        "Succesfully changed Publisher's message to "<< displayService.request.desiredMessage << " from Hello World");
+        "Successfully changed Publisher's message"
+        " to "<< displayService.request.desiredMessage << " from Hello World");
     ros::spin();
-  } else
-    ROS_FATAL_STREAM(
-        "Client call() not possible due to Server unavailability. Please run the Server service.");
+  } else {
+    ROS_FATAL_STREAM("Client call() not possible due to Server unavailability."
+        " Please run the Server service.");
+  }
   return 0;
-
 }
