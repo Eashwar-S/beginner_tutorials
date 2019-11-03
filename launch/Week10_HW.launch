@@ -1,9 +1,11 @@
 <launch>
+  <arg name="publisherFrequency" value="2" />
   <node
     pkg="beginner_tutorials"
     type="talker"
     name="talker"
     output = "screen"
+    args="$(arg publisherFrequency)"
     launch-prefix = "xterm -e"
   />
   <node

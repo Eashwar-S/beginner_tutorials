@@ -45,10 +45,12 @@
 #include <ros/ros.h>
 #include <std_msgs/String.h>
 #include "beginner_tutorials/DisplayService.h"
+#include <cstdlib>
 
 bool display = false;
 std::string output;
 int debug = 0;
+int publisherFrequency = 10;
 bool newMessage(beginner_tutorials::DisplayService::Request &request,
                 beginner_tutorials::DisplayService::Response &response) {
   ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
@@ -93,8 +95,16 @@ int main(int argc, char **argv) {
   ros::Publisher chatter_pub = nh_.advertise<std_msgs::String>("chatter", 1000);
   ros::ServiceServer displayService_ = nh_.advertiseService(
       "changing_talker_output", &newMessage);
-
-  ros::Rate loop_rate(10);
+  if (argc == 2) {
+    ROS_INFO_STREAM(
+        "The publisher will publish messages at frequency " << std::atoi(argv[1]) << " Hertz");
+    publisherFrequency = std::atoi(argv[1]);
+  } else if (argc == 1) {
+    ROS_WARN_STREAM(
+        "No publisher frequency specified. Using default frequency");
+  } else
+    ROS_ERROR_STREAM("Invalid Number of arguments");
+  ros::Rate loop_rate(publisherFrequency);
   auto count = 0;
   while (ros::ok()) {
     /**

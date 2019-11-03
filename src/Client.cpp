@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
   beginner_tutorials::DisplayService displayService;
   ROS_INFO_STREAM("Requesting server service to change publisher message");
   displayService.request.desiredMessage = "This is Eashwar";
-  ros::Rate loop_rate(40);
+  ros::Rate loop_rate(0.5);
   loop_rate.sleep();
   if (client.call(displayService)) {
     ROS_INFO_STREAM(
