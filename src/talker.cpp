@@ -48,6 +48,7 @@
  */
 #include <ros/console.h>
 #include <ros/ros.h>
+#include <tf/transform_broadcaster.h>
 #include <std_msgs/String.h>
 #include <sstream>
 #include <cstdlib>
@@ -67,14 +68,12 @@ int publisherFrequency = 10;
  * @return bool status of message change.
  *
  */
-bool newMessage(
-    beginner_tutorials::DisplayService::Request &request,
-    beginner_tutorials::DisplayService::Response &response) {
+bool newMessage(beginner_tutorials::DisplayService::Request &request,
+                beginner_tutorials::DisplayService::Response &response) {
   ROS_WARN_STREAM("Modifying the Custom Message of the Publisher");
   if (request.desiredMessage.size() > 0) {
     response.outputMessage = request.desiredMessage;
-    ROS_INFO_STREAM(
-        "Modified Talker's message to :" << response.outputMessage);
+    ROS_INFO_STREAM("Modified Talker's message to :" << response.outputMessage);
     if (debug == 0) {
       ROS_DEBUG_STREAM("Is debug variable == " << 0);
       display = !display;
@@ -120,6 +119,8 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle nh_;
+  static tf::TransformBroadcaster br;
+  tf::Transform transform;
   /// Creating a client service object
   if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME,
                                      ros::console::levels::Debug)) {
@@ -148,8 +149,7 @@ int main(int argc, char **argv) {
       "changing_talker_output", newMessage);
   if (argc == 2) {
     ROS_INFO_STREAM(
-        "The publisher will publish messages at"
-        " frequency " << std::atoi(argv[1]) << " Hertz");
+        "The publisher will publish messages at" " frequency " << std::atoi(argv[1]) << " Hertz");
     /// converting charater pointer to interger
     publisherFrequency = std::atoi(argv[1]);
   } else if (argc == 1) {
@@ -194,6 +194,12 @@ int main(int argc, char **argv) {
        */
       chatter_pub.publish(msg);
     }
+    transform.setOrigin(tf::Vector3(1.5, 3.0, 0.0));
+    tf::Quaternion q;
+    q.setRPY(1, 2, M_PI / 2);
+    transform.setRotation(q);
+    br.sendTransform(
+        tf::StampedTransform(transform, ros::Time::now(), "world", "talk"));
     ros::spinOnce();
     loop_rate.sleep();
   }
