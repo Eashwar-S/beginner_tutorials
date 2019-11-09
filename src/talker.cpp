@@ -181,7 +181,7 @@ int main(int argc, char **argv) {
        */
       chatter_pub.publish(msg);
     } else {
-      ss << "Hello World: Line : " << count;
+      ss << "ENPM808X Assignment: Line : " << count;
       msg.data = ss.str();
       ++count;
       ROS_INFO_STREAM(msg.data.c_str());
