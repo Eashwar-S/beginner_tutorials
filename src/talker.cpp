@@ -111,7 +111,7 @@ int main(int argc, char **argv) {
    * part of the ROS system.
    */
 
-  ros::init(argc, argv, "Server");
+  ros::init(argc, argv, "talker");
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
