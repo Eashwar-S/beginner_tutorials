@@ -49,7 +49,8 @@ include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
 )
-
+set(gmock_INCLUDE_DIR /usr/include/gmock)
+set(gmock_LIB_DIR /usr/lib)
 ## Declared a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
@@ -61,7 +62,7 @@ add_executable(Client src/Client.cpp)
 ## Added cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(talker beginner_tutorials_generate_messages_cpp)
+add_dependencies(talker beginner_tutorials_generate_messages_cpp ${simple_rostest_EXPORTED_TARGETS})
 add_dependencies(listener beginner_tutorials_generate_messages_cpp)
 add_dependencies(Client beginner_tutorials_generate_messages_cpp)
 ## Specified libraries to link a library or executable target against
@@ -71,3 +72,10 @@ add_dependencies(Client beginner_tutorials_generate_messages_cpp)
 target_link_libraries(talker ${catkin_LIBRARIES})
 target_link_libraries(listener ${catkin_LIBRARIES})
 target_link_libraries(Client ${catkin_LIBRARIES})
+
+if(CATKIN_ENABLE_TESTING)
+  find_package(rostest REQUIRED)
+  add_rostest_gtest(talkertest test/HW11_test.launch test/talkertest.cpp)
+  add_dependencies(talkertest talker beginner_tutorials_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+  target_link_libraries(talkertest ${catkin_LIBRARIES})
+endif()
