@@ -76,7 +76,7 @@ target_link_libraries(Client ${catkin_LIBRARIES})
 
 if(CATKIN_ENABLE_TESTING)
   find_package(rostest REQUIRED)
-  add_rostest_gtest(talkertest test/HW11_test.launch test/talkertest.cpp)
+  add_rostest_gtest(talkertest test/HW11_test.test test/talkertest.cpp)
   add_dependencies(talkertest talker beginner_tutorials_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
   target_link_libraries(talkertest ${catkin_LIBRARIES})
 endif()
