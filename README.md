@@ -167,7 +167,7 @@ cd catkin_ws
 source devel/setup.bash
 rosrun tf tf_echo world talk
 ```
-Sample Output:
+# Sample Output:
 ```
 At time 1573480900.713
 - Translation: [1.500, 3.000, 0.000]
@@ -195,9 +195,24 @@ Open a new terminal
 ```
 cd catkin_ws
 source devel/setup.bash
+cd catkin_ws/src/beginner_tutorials/results
 rosrun tf view_frames
 ```
+# Sample output:
+```
+Listening to /tf for 5.000000 seconds
+Done Listening
+dot - graphviz version 2.38.0 (20140413.2041)
+
+Detected dot version 2.38
+frames.pdf generated
+```
 view_frames creates a diagram of the frames being broadcast by tf over ROS. This will generate frames.pdf file. An sample example is provided in results folder.
+In order to view frames.pdf file:
+```
+cd catkin_ws/src/beginner_tutorials/results
+evince TFframes.pdf
+```
 ## To record the topics using rosbag using launch files
 Open a new terminal and run the following commands:
 ```
@@ -208,13 +223,13 @@ roslaunch beginner_tutorials Week10_HW.launch publisherFrequency:=<enter frequen
 This will record all the topics for 15 seconds and store it in record.bag file in results folder
 
 ## How to test .bag file
-Open a new termina; and run the following commands:
+Open a new terminal; and run the following commands:
 ```
 cd catkin_ws
 source devel/setup.bash
 rosrun beginner_tutorials listener
 ```
-Open another termina; and run the following commands:
+Open another terminal; and run the following commands:
 ```
 cd catkin_ws
 source devel/setup.bash
