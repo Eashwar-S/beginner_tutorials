@@ -121,7 +121,6 @@ int main(int argc, char **argv) {
   ros::NodeHandle nh_;
   static tf::TransformBroadcaster br;
   tf::Transform transform;
-  std::string output;
   std::string currentMessage = "ENPM808X Assignment";
   /// Creating a client service object
   if (ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME,
@@ -163,7 +162,6 @@ int main(int argc, char **argv) {
   ros::Rate loop_rate(publisherFrequency);
   auto count = 0;
   beginner_tutorials::DisplayService displayService;
-  output = displayService.response.outputMessage;
   while (ros::ok()) {
     /**
      * This is a message object. You stuff it with data, and then publish it.
@@ -173,7 +171,7 @@ int main(int argc, char **argv) {
     if (display) {
       ROS_INFO_STREAM_ONCE("Publisher is publishing the new Message");
 
-      ss << output <<" : Line : " << count;
+      ss << "This is Eashwar : Line : " << count;
       msg.data = ss.str();
       ROS_INFO("%s", msg.data.c_str());
       ++count;

@@ -1,5 +1,6 @@
 <launch>
-  <arg name="publisherFrequency" value="2" />
+  <arg name="publisherFrequency" default="2" />
+  <arg name="rosbagRecord" default = "false" />
   <node
     pkg="beginner_tutorials"
     type="talker"
@@ -23,4 +24,13 @@
     output = "screen"
     launch-prefix = "xterm -e"
   />
+  <node
+    pkg = "rosbag"
+    type = "record"
+    name = "record"
+    args="-a --duration=15 -O  $(find beginner_tutorials)/results/record.bag "
+    output = "screen"
+    launch-prefix = "xterm -e"
+    if = "$(arg rosbagRecord)"
+  />    
 </launch>

@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
   tf
+  rosbag
 )
 
 ## Generate messages in the 'msg' folder
@@ -33,9 +34,9 @@ find_package(catkin REQUIRED COMPONENTS
    std_msgs
  )
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES beginner_tutorials
-  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs
+  INCLUDE_DIRS include
+  LIBRARIES rosbag_record
+  CATKIN_DEPENDS message_runtime roscpp rospy std_msgs rosbag
 #  DEPENDS system_lib
 )
 
