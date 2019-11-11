@@ -64,6 +64,12 @@ cd catkin_ws
 source devel/setup.bash
 catkin_make run_tests
 ```
+## To run tests using launch files
+```
+cd catkin_ws
+source devel/setup.bash
+rostest beginner_tutorials HW11_test.launch
+```
 
 ## How to run using terminal
 First us to run ROS master
