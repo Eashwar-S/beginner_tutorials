@@ -1,11 +1,12 @@
 Command:
 
-~/catkin_ws/src$ cpplint $( find . -name \*.hpp -or -name \*.cpp | grep -vE -e "^./build/" -e "^./vendor/" -e "^./docs/" -e "^./results" )
+~/catkin_ws$ cpplint $( find . -name \*.hpp -or -name \*.cpp | grep -vE -e "^./build/" -e "^./vendor/" -e "^./docs/" -e "^./results" )
 
 Output:
 
-./src/beginner_tutorials/src/talker.cpp:71:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Request &request  [runtime/references] [2]
-./src/beginner_tutorials/src/talker.cpp:72:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Response &response  [runtime/references] [2]
+Done processing ./src/beginner_tutorials/test/talkertest.cpp
+./src/beginner_tutorials/src/talker.cpp:72:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Request &request  [runtime/references] [2]
+./src/beginner_tutorials/src/talker.cpp:73:  Is this a non-const reference? If so, make const or use a pointer: beginner_tutorials::DisplayService::Response &response  [runtime/references] [2]
 Done processing ./src/beginner_tutorials/src/talker.cpp
 Done processing ./src/beginner_tutorials/src/Client.cpp
 Done processing ./src/beginner_tutorials/src/listener.cpp
