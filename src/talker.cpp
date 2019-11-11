@@ -34,7 +34,8 @@
  * @author Eashwar Sathyamurthy
  *
  * @brief A C++ publisher node having server service to change the messages
- *        published by the publisher.
+ *        published by the publisher and can transform coordinates from world
+ *        frame to talk frame.
  *
  * @param display Parameter giving status as to which message to publish.
  *
@@ -119,7 +120,9 @@ int main(int argc, char **argv) {
    */
 
   ros::NodeHandle nh_;
+  /// creating a TransformBroadcaster object
   static tf::TransformBroadcaster br;
+  /// creating a Transform object
   tf::Transform transform;
   std::string currentMessage = "ENPM808X Assignment";
   /// Creating a client service object
@@ -150,7 +153,8 @@ int main(int argc, char **argv) {
       "changing_talker_output", newMessage);
   if (argc == 2) {
     ROS_INFO_STREAM(
-        "The publisher will publish messages at" " frequency " << std::atoi(argv[1]) << " Hertz");
+        "The publisher will publish messages at" " frequency "
+        << std::atoi(argv[1]) << " Hertz");
     /// converting charater pointer to interger
     publisherFrequency = std::atoi(argv[1]);
   } else if (argc == 1) {
@@ -196,10 +200,16 @@ int main(int argc, char **argv) {
        */
       chatter_pub.publish(msg);
     }
+    /// Setting a non-zero origin in X-Y plane
     transform.setOrigin(tf::Vector3(1.5, 3.0, 0.0));
+    /// Creating a object of Quaternion for rotation and translation
     tf::Quaternion q;
+    /// Providing angles for rotation
     q.setRPY(1, 2, M_PI / 2);
+    /// Setting the rotation using quaternions
     transform.setRotation(q);
+    /// Sending a transform with a TransformBroadcaster from world
+    /// frame to talk frame
     br.sendTransform(
         tf::StampedTransform(transform, ros::Time::now(), "world", "talk"));
     ros::spinOnce();

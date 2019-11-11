@@ -95,7 +95,9 @@ int main(int argc, char **argv) {
   loop_rate.sleep();
   if (client.call(displayService)) {
     ROS_INFO_STREAM(
-        "Successfully changed Publisher's message" " to "<< displayService.request.desiredMessage << " from ENPM808X Assignment");
+        "Successfully changed Publisher's message" " to "
+        << displayService.request.desiredMessage
+        << " from ENPM808X Assignment");
     ros::spin();
   } else {
     ROS_FATAL_STREAM("Client call() not possible due to Server unavailability."

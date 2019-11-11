@@ -33,40 +33,52 @@
  *
  * @author Eashwar Sathyamurthy
  *
- * @brief test cases (Google Test framework) for talker node.
- *
- * @param display Parameter giving status as to which message to publish.
- *
- * @param debug Default publisher frequency.
+ * @brief INtegration test case (Google Test framework) for CLient service.
  *
  * @version 1
  *
  * @date 2019-11-09
  *
- *
+ * This file defines a test case to test the Client node.
  */
 #include <gtest/gtest.h>
 #include <ros/console.h>
 #include <ros/ros.h>
 #include <tf/transform_broadcaster.h>
-#include <std_msgs/String.h>
-#include <sstream>
-#include <cstdlib>
 #include "beginner_tutorials/DisplayService.h"
 
+/**
+ *@brief Integration Test for testing Client node
+ *
+ *This test checks the Client service by calling the service
+ *and checks if the service is processed or not by testing the response.
+ *
+ */
 TEST(talkertest, testingCLientService) {
   ros::NodeHandle nh;
+  /// Creating a service object to access service file contents
   beginner_tutorials::DisplayService displayService;
-    displayService.request.desiredMessage = "Client passed the test";
+  /// Setting request
+  displayService.request.desiredMessage = "Client passed the test";
   ros::ServiceClient client = nh
-        .serviceClient<beginner_tutorials::DisplayService>(
-            "changing_talker_output");
+      .serviceClient<beginner_tutorials::DisplayService>(
+          "changing_talker_output");
+  /// Calling the client
   bool pass = client.call(displayService);
   EXPECT_TRUE(pass);
-  if(pass)
-    EXPECT_EQ(displayService.request.desiredMessage, displayService.response.outputMessage);
-
+  if (pass) {
+    /// Checking if request is processed or not
+    EXPECT_EQ(displayService.request.desiredMessage,
+              displayService.response.outputMessage);
+  }
 }
+
+/**
+ *@brief main method to run all test cases
+ *
+ *This method to used to run the tests using google framework.
+ *
+ */
 
 int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
