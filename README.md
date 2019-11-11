@@ -1,4 +1,4 @@
-# beginner_tutorials of Publisher/Subscriber node in ROS
+# beginner_tutorials of ROS
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 ## Overview:
@@ -154,7 +154,7 @@ In the terminal which is running listener we get output
 [ INFO] [1572773552.038114773]: Successfully changed Publisher's message to This is Eashwar from Hello World
 ```
 ## To verify TF frames
-Fist use tf_echo.tf_echo reports the transform between any two frames broadcast over ROS.
+First use tf_echo.tf_echo reports the transform between any two frames broadcast over ROS.
 Open new terminal and run talker 
 ```
 cd catkin_ws
@@ -208,7 +208,7 @@ Detected dot version 2.38
 frames.pdf generated
 ```
 view_frames creates a diagram of the frames being broadcast by tf over ROS. This will generate frames.pdf file. An sample example is provided in results folder.
-In order to view frames.pdf file:
+#In order to view frames.pdf file:
 ```
 cd catkin_ws/src/beginner_tutorials/results
 evince TFframes.pdf
