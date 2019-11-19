@@ -47,8 +47,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
+#  include
+  ${catkin_INCLUDE_DIRS} 
 )
 set(gmock_INCLUDE_DIR /usr/include/gmock)
 set(gmock_LIB_DIR /usr/lib)
